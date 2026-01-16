@@ -1,0 +1,279 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Technical Mathematics – Straight Lines</title>
+
+<style>
+body {
+    font-family: "Segoe UI", sans-serif;
+    background: linear-gradient(to bottom, #020617, #0f172a);
+    color: white;
+    margin: 0;
+}
+
+h1 {
+    text-align: center;
+    margin-top: 15px;
+    color: #38bdf8;
+}
+
+.instructions {
+    text-align: center;
+    color: #cbd5e1;
+    margin-bottom: 15px;
+}
+
+.road-container {
+    width: 90%;
+    margin: auto;
+}
+
+.road {
+    position: relative;
+    height: 70px;
+    background: #1e293b;
+    margin: 18px 0;
+    border-radius: 10px;
+    overflow: hidden;
+}
+
+.road::after {
+    content: "";
+    position: absolute;
+    top: 50%;
+    width: 100%;
+    border-top: 2px dashed #64748b;
+}
+
+.car {
+    position: absolute;
+    font-size: 28px;
+    top: 18px;
+    left: 140px;
+    cursor: grab;
+    user-select: none;
+}
+
+.fact {
+    position: absolute;
+    left: 20px;
+    top: 5px;
+    font-size: 14px;
+    max-width: 75%;
+    opacity: 0;
+    transform: translateY(10px);
+    transition: all 0.7s ease;
+    color: #7dd3fc;
+}
+
+.fact.show {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+/* FINAL POSTER */
+#finalPoster {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: linear-gradient(135deg, #020617, #1e3a8a);
+    padding: 30px;
+    overflow-y: auto;
+}
+
+.poster-box {
+    max-width: 800px;
+    margin: auto;
+    background: linear-gradient(135deg, #0f172a, #020617);
+    border-radius: 15px;
+    padding: 25px;
+    box-shadow: 0 0 25px #38bdf8;
+}
+
+.poster-box h2 {
+    text-align: center;
+    color: #38bdf8;
+    font-size: 32px;
+}
+
+.poster-box h3 {
+    text-align: center;
+    color: #a5f3fc;
+}
+
+.poster-section {
+    margin-top: 20px;
+}
+
+.poster-section h4 {
+    color: #facc15;
+}
+
+.poster-section ul {
+    line-height: 1.6;
+}
+
+.team {
+    margin-top: 25px;
+    text-align: center;
+    color: #cbd5e1;
+    font-size: 18px;
+}
+
+button {
+    display: block;
+    margin: 25px auto 0;
+    padding: 10px 30px;
+    font-size: 16px;
+    background: #38bdf8;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+}
+</style>
+</head>
+
+<body>
+
+<h1>Straight Line Car Game by Co-ordinate Crew</h1>
+<p class="instructions">Drag the car backward and release to move forward 🚗</p>
+
+<div class="road-container">
+
+    <div class="road">
+        <div class="fact">Horizontal roads follow <b>y = constant</b>, ensuring uniform alignment in satellite mapping.</div>
+        <div class="car">🚗</div>
+    </div>
+
+    <div class="road">
+        <div class="fact">Vertical roads represent <b>x = constant</b>, useful for north–south navigation.</div>
+        <div class="car">🚗</div>
+    </div>
+
+    <div class="road">
+        <div class="fact">Parallel roads have equal slopes, preventing intersections and improving traffic flow.</div>
+        <div class="car">🚗</div>
+    </div>
+
+    <div class="road">
+        <div class="fact">Slope (Δy/Δx) determines road steepness for safe engineering design.</div>
+        <div class="car">🚗</div>
+    </div>
+
+    <div class="road">
+        <div class="fact">A straight line gives the shortest distance, reducing fuel and travel time.</div>
+        <div class="car">🚗</div>
+    </div>
+
+</div>
+
+<!-- FINAL POSTER -->
+<div id="finalPoster">
+    <div class="poster-box">
+        <h2>Technical Mathematics</h2>
+        <h3>Straight Lines</h3>
+
+        <div class="poster-section">
+            <h4>Key Concepts</h4>
+            <ul>
+               <li>Horizontal line → y = constant</li>
+                <li>Vertical line → x = constant</li>
+                <li>Parallel lines → equal slopes</li>
+                <li>Slope represents direction and steepness</li>
+                <li>Straight line gives minimum distance</li>
+            </ul>
+        </div>
+
+        <div class="poster-section">
+            <h4>Real-Life Applications</h4>
+            <ul>
+                <li>Satellite maps & GPS navigation</li>
+                <li>Highway and bridge construction</li>
+                <li>Railway track alignment</li>
+            </ul>
+        </div>
+
+        <div class="team">
+            <p><b>Done By</b></p>
+            <p>Iswarya S R</p>
+            <p>Abinaya D</p>
+            <p>Thiruvasuki T</p>
+            <p>Akshaya D</p>
+        </div>
+
+        <button onclick="location.reload()">Replay Game</button>
+    </div>
+</div>
+
+<script>
+const roads = document.querySelectorAll(".road");
+let completed = 0;
+
+/* ACCELERATION SOUND */
+function playEngineSound() {
+    const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+    const oscillator = audioCtx.createOscillator();
+    const gainNode = audioCtx.createGain();
+
+    oscillator.type = "sawtooth";
+    oscillator.frequency.setValueAtTime(120, audioCtx.currentTime);
+    oscillator.frequency.exponentialRampToValueAtTime(420, audioCtx.currentTime + 1.2);
+
+    gainNode.gain.setValueAtTime(0.05, audioCtx.currentTime);
+    gainNode.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 1.2);
+
+    oscillator.connect(gainNode);
+    gainNode.connect(audioCtx.destination);
+
+    oscillator.start();
+    oscillator.stop(audioCtx.currentTime + 1.2);
+}
+
+roads.forEach(road => {
+    const car = road.querySelector(".car");
+    const fact = road.querySelector(".fact");
+    let isDragging = false;
+    let startX = 140;
+
+    car.addEventListener("mousedown", () => {
+        isDragging = true;
+        car.style.cursor = "grabbing";
+    });
+
+    document.addEventListener("mousemove", e => {
+        if (!isDragging) return;
+        const rect = road.getBoundingClientRect();
+        let x = e.clientX - rect.left - 15;
+        if (x > startX) x = startX;
+        if (x < 10) x = 10;
+        car.style.left = x + "px";
+    });
+
+    document.addEventListener("mouseup", () => {
+        if (!isDragging) return;
+        isDragging = false;
+        car.style.cursor = "grab";
+
+        playEngineSound();
+
+        car.style.transition = "left 2.5s cubic-bezier(0.4, 0, 0.2, 1)";
+        car.style.left = "calc(100% - 40px)";
+        fact.classList.add("show");
+
+        if (!road.classList.contains("done")) {
+            road.classList.add("done");
+            completed++;
+        }
+
+        if (completed === 5) {
+            setTimeout(() => {
+                document.getElementById("finalPoster").style.display = "block";
+            }, 3000);
+        }
+    });
+});
+</script>
+
+</body>
+</html>
